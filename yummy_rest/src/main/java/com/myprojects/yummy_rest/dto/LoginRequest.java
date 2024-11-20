@@ -1,4 +1,4 @@
-package com.myprojects.yummy_rest.dto;
+package org.myprojects.yummy_rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
@@ -10,6 +10,7 @@ public record LoginRequest(
         @Email(message = "Email must be in correct format")
         @JsonProperty("email")
         String email,
+
         @NotBlank(message = "Password is required")
         @Size(min = 3, max = 6, message = "Invalid password size")
         @JsonProperty("password")

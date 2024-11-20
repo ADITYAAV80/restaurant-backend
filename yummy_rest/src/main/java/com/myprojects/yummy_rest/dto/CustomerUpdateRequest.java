@@ -1,13 +1,13 @@
 package org.myprojects.yummy_rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 
-public record CustomerResponse(
+public record CustomerUpdateRequest(
         @JsonProperty("first_name")
         String firstName,
+
         @JsonProperty("last_name")
-        String lastName,
-        @JsonProperty("email")
-        String email
+        String lastName
 ) {
 }

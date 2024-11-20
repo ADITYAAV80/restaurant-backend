@@ -1,4 +1,4 @@
-package com.myprojects.yummy_rest.helper;
+package org.myprojects.yummy_rest.helper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,19 +10,24 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 public class RequestInterceptor implements HandlerInterceptor {
     private final JWTHelper jwtHelper;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String authorizationHeader = request.getHeader("Authorization");
+
         if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
+
         String token = authorizationHeader.substring(7);
         String email = jwtHelper.extractEmail(token);
-        if(email == null || !jwtHelper.validateToken(token, email)) {
+
+        if(email == null || !jwtHelper.validateToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
+
         return true;
     }
 }
