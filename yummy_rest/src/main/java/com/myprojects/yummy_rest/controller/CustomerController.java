@@ -2,6 +2,7 @@ package com.myprojects.yummy_rest.controller;
 
 import com.myprojects.yummy_rest.dto.CustomerRequest;
 import com.myprojects.yummy_rest.dto.CustomerResponse;
+import com.myprojects.yummy_rest.dto.LoginRequest;
 import com.myprojects.yummy_rest.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,6 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> getCustomer(@PathVariable("email") String email) {
         return ResponseEntity.ok(customerService.retrieveCustomer(email));
     }
-
 
     @PostMapping
     public ResponseEntity<String> createCustomer(@RequestBody @Valid CustomerRequest request) {

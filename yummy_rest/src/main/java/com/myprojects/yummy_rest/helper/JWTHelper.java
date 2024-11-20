@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Component
 public class JWTHelper {
-    private final String SECRET_KEY = "some random text secret vghvh vhgvhghv";
+    private final String SECRET_KEY = "a_super_secure_and_very_long_secret_key_example_32bytes";
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 12;
     private SecretKey getSigningKey() {
         byte[] keyBytes = SECRET_KEY.getBytes();
@@ -20,10 +20,10 @@ public class JWTHelper {
     }
     public String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .claims(claims)
-                .subject(subject)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .addClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()+EXPIRATION_TIME))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -32,11 +32,11 @@ public class JWTHelper {
         return createToken(claims, email);
     }
     public Claims extractClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        return Jwts.parserBuilder() // Use parserBuilder()
+                .setSigningKey(getSigningKey()) // Set the signing key
+                .build() // Build the parser
+                .parseClaimsJws(token) // Parse the JWS
+                .getBody();
     }
     public String extractEmail(String token) {
         return extractClaims(token).getSubject();

@@ -6,6 +6,7 @@ import com.myprojects.yummy_rest.dto.LoginRequest;
 import com.myprojects.yummy_rest.encryption.EncryptionService;
 import com.myprojects.yummy_rest.entity.Customer;
 import com.myprojects.yummy_rest.exception.CustomerNotFoundException;
+import com.myprojects.yummy_rest.helper.JWTHelper;
 import com.myprojects.yummy_rest.mapper.CustomerMapper;
 import com.myprojects.yummy_rest.repo.CustomerRepo;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class CustomerService {
     private final CustomerMapper mapper;
     private final CustomerRepo customerRepo;
     private final EncryptionService encryptionService;
+    private final JWTHelper jwtHelper;
 
     public String createCustomer(CustomerRequest request) {
         Customer customer = mapper.toCustomer(request);
@@ -43,7 +45,6 @@ public class CustomerService {
         if(!encryptionService.validates(request.password(), customer.getPassword())) {
             return "Incorrect email or password";
         }
-        return "";
-        //return jwtHelper.generateToken(request.email());
+        return jwtHelper.generateToken(request.email());
     }
 }
