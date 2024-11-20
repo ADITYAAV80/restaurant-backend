@@ -2,6 +2,7 @@ package com.myprojects.yummy_rest.service;
 
 import com.myprojects.yummy_rest.dto.CustomerRequest;
 import com.myprojects.yummy_rest.dto.CustomerResponse;
+import com.myprojects.yummy_rest.dto.LoginRequest;
 import com.myprojects.yummy_rest.encryption.EncryptionService;
 import com.myprojects.yummy_rest.entity.Customer;
 import com.myprojects.yummy_rest.exception.CustomerNotFoundException;
@@ -35,5 +36,14 @@ public class CustomerService {
     public CustomerResponse retrieveCustomer(String email) {
         Customer customer = getCustomer(email);
         return mapper.toCustomerResponse(customer);
+    }
+
+    public String loginCustomer(LoginRequest request) {
+        Customer customer = getCustomer(request.email());
+        if(!encryptionService.validates(request.password(), customer.getPassword())) {
+            return "Incorrect email or password";
+        }
+        return "";
+        //return jwtHelper.generateToken(request.email());
     }
 }
